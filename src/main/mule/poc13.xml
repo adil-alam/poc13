@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e1451ad7-5d2e-443c-b04f-0874d184faeb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="poc13Flow" doc:id="2e54c786-14ff-4a89-8755-24650155ac07" >
+		<http:listener doc:name="Listener" doc:id="230ab008-0ebf-45ea-8d35-576d238cf0e3" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Transform Message" doc:id="15ad2414-a886-4949-bd48-5240fb8f1b95" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[{
+"name":"shariq",
+"sal":2000
+},
+{
+"name":"manish",
+"sal":1000
+},
+{
+"name":"shaif",
+"sal":7000
+},
+{
+"name":"amit",
+"sal":4000}
+] map((item,index)->item.sal) reduce(item,accumulator)->item+accumulator]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
